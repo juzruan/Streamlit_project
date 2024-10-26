@@ -6,6 +6,8 @@ st.set_page_config(
     page_title="Methodology"
 ) 
 
+st.sidebar.write("All the info you need about platform work")
+
 # Add some content to the main app
 st.title("Platform Work Chatbot 💰🤖")
 
