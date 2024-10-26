@@ -6,11 +6,6 @@ st.set_page_config(
     page_title="About Me"
 ) 
 
-st.sidebar.write("All the info you need about platform work")
-st.sidebar.page_link("Assistant.py", label="Main")
-st.sidebar.page_link("pages/AboutMe.py", label="About Me")
-st.sidebar.page_link("pages/Methodology.py", label="Methodology")
-
 # Add some content to the main app
 st.title("Platform Work Chatbot 💰🤖")
 
