@@ -12,9 +12,9 @@ import streamlit as st
 
 
 # %% [markdown]
-# scrape data from IRAS
+# scrape data from MOM
 @st.cache_resource
-def scrap_iras_data():
+def scrap_mom_data():
 # %%
 
     def scrape_section(section):
@@ -87,23 +87,58 @@ def scrap_iras_data():
 
 
 
-    # Get the different types of relief
+    # Get the different links
 
 
-    all_relief_main_url = "https://www.iras.gov.sg/taxes/individual-income-tax/basics-of-individual-income-tax/tax-reliefs-rebates-and-deductions/tax-reliefs"
+    platform_workers_main_url = "https://www.mom.gov.sg/employment-practices/platform-workers-act/"
 
 
-    all_relief_url = ['earned-income-relief',
-    'spouse-relief-spouse-relief-(disability)',
-    'foreign-domestic-worker-levy-(fdwl)-relief',
-    "central-provident-fund(cpf)-relief-for-employees",
-    "central-provident-fund-(cpf)-relief-for-self-employed-employee-who-is-also-self-employed",
-    "nsman-relief-(self-wife-and-parent)",
-    "parent-relief-parent-relief-(disability)",
-    "grandparent-caregiver-relief",
-    "sibling-relief-(disability)",
-    "working-mother's-child-relief-(wmcr)",
-    "qualifying-child-relief-(qcr)-child-relief-(disability)",
-    "life-insurance-relief",
-    "course-fees-relief",
-    "central-provident-fund-(cpf)-cash-top-up-relief",
+    platform_workers_url = ['what-it-covers','platform-worker','platform-operator','work-injury-compensation-for-platform-workers','cpf-contributions-for-platform-workers','platform-worker-records-and-earning-slips','mandatory-notification-of-platform-operators','platform-work-associations']
+
+    base_url = "https://www.mom.gov.sg/employment-practices/platform-workers-act/"
+
+    # %%
+    scrapped_all = {}   
+    for platform_workers in  platform_workers_url:
+        #scrapped_ = scrape_page(url)
+        print(f"Scrapping:{base_url}{platform_workers}")
+        scrapped_ = scrape_page(f"{base_url}{platform_workers}")
+        scrapped_all[platform_workers] =scrapped_
+
+
+    scrapped_all
+
+
+    from langchain_text_splitters import RecursiveJsonSplitter
+
+    splitter = RecursiveJsonSplitter(max_chunk_size=400)
+
+    json_chunks = splitter.split_json(json_data=scrapped_all)
+
+    json_docs = splitter.create_documents(texts=[scrapped_all])
+    for chunk in json_chunks:
+        print(chunk)
+
+
+    #from langchain_chroma import Chroma
+    from langchain_openai import OpenAIEmbeddings
+
+    embeddings_model = OpenAIEmbeddings(model='text-embedding-3-small')
+
+    vectorstore = FAISS.from_documents(documents=json_docs, embedding=embeddings_model)
+
+    return vectorstore 
+
+prompt = ChatPromptTemplate([ ("human", "You are an assistant for question-answering tasks.\
+                                Use the following pieces of retrieved context to answer the question. If you don't know the answer, just say that you don't know. You can present the findings in a table or in point form. \
+Question: {question} \
+Context: {context} \
+Answer:")])
+
+qa_chain = RetrievalQA.from_chain_type(
+    ChatOpenAI(model='gpt-4o-mini', temperature=0), retriever=scrap_mom_data().as_retriever(), chain_type_kwargs={"prompt": prompt}
+)
+
+def ask_platform_work_qn(question):
+    result = qa_chain.invoke({"query": question})
+    return(result["result"])
