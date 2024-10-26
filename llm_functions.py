@@ -1,15 +1,13 @@
 import os
 from dotenv import load_dotenv
-from openai import OpenAI
+import openai
 import tiktoken
 
-
+# Load environment variables from .env file
 load_dotenv('.env')
 
-# Pass the API Key to the OpenAI Client
-client = OpenAI(
-    api_key = "OPENAI_API_KEY",
-)
+# Set the API key for the OpenAI client
+openai.api_key = os.getenv('OPENAI_API_KEY')
 #client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
 
