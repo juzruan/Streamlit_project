@@ -8,8 +8,8 @@ st.set_page_config(
 
 st.sidebar.write("All the info you need about platform work")
 st.sidebar.page_link("Assistant.py", label="Main")
-st.sidebar.page_link("AboutMe.py", label="About Me")
-st.sidebar.page_link("Methodology.py", label="Methodology")
+st.sidebar.page_link("pages/AboutMe.py", label="About Me")
+st.sidebar.page_link("pages/Methodology.py", label="Methodology")
 
 import llm_functions # <--- This is the helper function that we have created 🆕
 import scrape3
