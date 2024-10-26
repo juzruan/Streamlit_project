@@ -14,4 +14,4 @@ st.sidebar.page_link("pages/Methodology.py", label="Methodology")
 # Add some content to the main app
 st.title("Platform Work Chatbot 💰🤖")
 
-st.image("pages/image.jpg", caption="Methodology", use_column_width=True)
+st.image("pages/image.png", caption="Methodology", use_column_width=True)
