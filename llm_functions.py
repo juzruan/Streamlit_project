@@ -65,3 +65,16 @@ def count_tokens_from_message(messages):
     encoding = tiktoken.encoding_for_model("gpt-4o-mini",)
     value = ' '.join([x.get('content') for x in messages])
     return len(encoding.encode(value))
+
+# This function is for computing the total CPF Contributions and the Platform Worker's share of CPF contributions.
+
+def calculate_with_llm(prompt):
+    # Prepare your prompt with the reference data
+    full_prompt = f"{prompt}\nReference data: {reference_data}"
+    
+    # Send prompt to OpenAI and get the response
+    response = openai.Completion.create(
+        engine="text-davinci-003",  # Choose the engine that fits your needs
+        prompt=full_prompt,
+        max_tokens=100  # Adjust max tokens based on your needs
+    )
