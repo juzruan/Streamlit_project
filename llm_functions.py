@@ -78,3 +78,7 @@ def calculate_with_llm(prompt):
         prompt=full_prompt,
         max_tokens=100  # Adjust max tokens based on your needs
     )
+    
+    # Extract the response text
+    answer = response.choices[0].text.strip()
+    return answer
