@@ -22,12 +22,10 @@ FEDA = st.radio(
 if FEDA == "Cars, vans, lorries, trucks":
     st.write("Your Fixed Expense Deduction Amount is 60%.")
     FEDAr == 0.6
-else:
-    FEDA == "Motorcycles, power-assisted bicycles, motorised personal mobility devices":
+elif FEDA == "Motorcycles, power-assisted bicycles, motorised personal mobility devices":
     st.write("Your Fixed Expense Deduction Amount is 35%.")
     FEDAr == 0.35
-else:
-    FEDA == "Bicycles, on foot (including use of public transport)":
+elif FEDA == "Bicycles, on foot (including use of public transport)":
     st.write("Your Fixed Expense Deduction Amount is 20%.")
     FEDAr == 0.2
 else:
