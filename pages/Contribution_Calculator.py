@@ -31,5 +31,5 @@ else:
     st.write("Your Fixed Expense Deduction Amount is 20%.")
     FEDAr == 0.2
 else:
-    FEDAr == 0
+    FEDAr == 0)
 
