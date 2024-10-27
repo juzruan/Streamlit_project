@@ -3,6 +3,9 @@ import streamlit as st
 import llm_functions
 import openai
 import pandas as pd
+from langchain.chains import RetrievalQA
+from langchain.prompts import ChatPromptTemplate
+from langchain.chat_models import ChatOpenAI
 
 st.set_page_config(
     layout="centered",
@@ -45,42 +48,48 @@ st.write(f"Your Net Earnings is ${NE:.2f}.")
 csv_file_path = "https://raw.githubusercontent.com/juzruan/Streamlit_project/refs/heads/main/ConRate.csv"  # update this path
 reference_df = pd.read_csv(csv_file_path)
 
-#try:
-   # total_cpf_con = reference_df.loc[reference_df['Total_CPF_Con'] == 'Total CPF Contribution', 'Value'].values[0]
-   # platform_worker_share = reference_df.loc[reference_df['PW_Share_CPF_Con'] == 'Platform Worker Share of CPF Contribution', 'Value'].values[0]
-#except IndexError:
-   # st.error("Required fields not found in reference data.")
-   # st.stop()
+# Define CPF calculation prompt template
+cpf_prompt = ChatPromptTemplate([("human", "You are an assistant to calculate CPF contributions. \
+Use the following details and reference data to compute: \
+- Total CPF contributions \
+- Platform worker's share of contributions \
+If you can't determine contributions, state 'Calculation unavailable'. \
+Details: \
+Net Earnings: {NE} \
+Age: {Age} \
+Year: {Year} \
+Reference Data: {reference_df}")])
 
-def calculate_with_llm(Age, NE, Year, Total_CPF_Con, PW_Share_CPF_Con):
-    Age = int(Age) if Age else None
-    NE = float(NE) if NE else None
-    Year = int(Year) if Year else None
-    
-    prompt = (
-        f"Using the following data:\n"
-        f"Age: {age}\n"
-        f"Net Earnings (NE): {NE}\n"
-        f"Year: {year}\n"
-        f"Total CPF Contribution: {total_cpf_con}\n"
-        f"Platform Worker's Share of CPF Contribution: {platform_worker_share}\n\n"
-        "Please calculate the following:\n"
-        "1. Total CPF Contribution.\n"
-        "2. Platform Worker's Share of CPF Contribution based on the above information."
-    )
-    
-    response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=prompt,
-        max_tokens=150
-    )
-    
-    answer = response.choices[0].text.strip()
-    return answer
+# Define QA chain for CPF calculation
+cpf_qa_chain = RetrievalQA.from_chain_type(
+    ChatOpenAI(model='gpt-4o-mini', temperature=0), 
+    retriever=scrap_mom_data().as_retriever(), 
+    chain_type_kwargs={"prompt": cpf_prompt}
+)
 
-# Display result if inputs are filled
-if Age and NE and Year:
-    result = calculate_with_llm(Age, NE, Year, Total_CPF_Con, PW_Share_CPF_Con)
-    st.write("Calculation Results:", result)
-else:
-    st.write("Please enter all required fields.")
+def calculate_cpf_contributions(NE, Age, Year, reference_df):
+    # Convert reference df into a suitable format for the prompt
+    reference_df = reference_df.to_dict()  # convert dataframe to dictionary format
+    
+    # Create the question with CPF details and reference data
+    question = {
+        "NE": NE,
+        "Age": Age,
+        "Year": Year,
+        "reference_df": reference_df
+    }
+    
+    # Run the CPF calculation chain
+    result = cpf_qa_chain.invoke({"query": question})
+    return result["result"]
+
+# Example usage in Streamlit
+net_earnings = 3000  # example value
+age = 30  # example value
+year = 2024  # example value
+
+# Calculate CPF contributions
+cpf_result = calculate_cpf_contributions(NE, Age, Year, reference_df)
+
+# Display results in Streamlit
+st.write("CPF Contribution Calculation:", cpf_result)
