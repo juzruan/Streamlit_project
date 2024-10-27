@@ -43,7 +43,7 @@ else:
     FEDAr = 0
 
 NE = (1-FEDAr)*GE
-st.write(f"Your Net Earnings is ${NE:.2f}.")
+st.write(f"Your Net Earnings (NE) is ${NE:.2f}.")
 
 # Load the reference data CSV
 csv_file_path = "https://raw.githubusercontent.com/juzruan/Streamlit_project/refs/heads/main/ConRate.csv"  # update this path
@@ -61,6 +61,7 @@ Use the provided details and reference data below to compute the following value
 Only provide the computed results, with explanations if necessary. \
 If unable to determine contributions, respond with 'Calculation unavailable'. \
 The result for each point should be in a new line. \
+The same font and style should be used for all the results displayed. \
 Mathematical computations need to be written in text that is understandable. \
 Details: \
 - Net Earnings: {NE} \
