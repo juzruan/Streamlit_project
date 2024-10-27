@@ -11,6 +11,10 @@ st.sidebar.write("All the info you need about platform work")
 # Add some content to the main app
 st.title("Platform Work Chatbot 💰🤖")
 
+st.write("This calculator is for Platform Workers born in or after 1995, or those who opt in to increased CPF savings.")
+
+Year = st.number_input("You are computing CPF contributions for income earned in Year: ", min_value=2025,max_value=2029,step=1)
+
 Age = st.number_input("Your age, as at 1 January of the year, is: ", min_value=1,max_value=99,step=1)
 
 GE = st.number_input("Your gross earnings for the year is: $",min_value=1,step=1)
@@ -31,3 +35,5 @@ elif FEDA == "Bicycles, on foot (including use of public transport)":
 else:
     FEDAr = 0
 
+NE = (1-FEDAr)*GE
+st.write(f"Your Net Earnings is ${NE:.2f}.")
