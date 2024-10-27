@@ -71,16 +71,14 @@ cpf_chain = LLMChain(
     prompt=cpf_prompt
 )
 
-def calculate_cpf_contributions(NE, Age, Year, reference_df):
-    # Convert reference data to a dictionary format for the prompt
-    reference_data = reference_df.to_dict()
+def calculate_cpf_contributions(NE, Age, Year, reference_data_str):
     
     # Prepare the input data for the LLM chain
     inputs = {
         "NE": NE,
         "Age": Age,
         "Year": Year,
-        "reference_data": reference_data
+        "reference_data_str": reference_data_str
     }
     
     # Run the chain to get the result
@@ -88,7 +86,7 @@ def calculate_cpf_contributions(NE, Age, Year, reference_df):
     return result
 
 # Calculate CPF contributions
-cpf_result = calculate_cpf_contributions(NE, Age, Year, reference_df)
+cpf_result = calculate_cpf_contributions(NE, Age, Year, reference_data_str)
 
 # Display results in Streamlit
 st.write("CPF Contribution Calculation:", cpf_result)
