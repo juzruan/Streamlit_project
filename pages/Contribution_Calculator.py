@@ -62,12 +62,6 @@ Use the provided details and reference data below to compute the following value
 Only provide the computed results, with explanations if necessary. \
 If unable to determine contributions, respond with 'Calculation unavailable'. \
 The result for each point should be in a new line. \
-The result for the first point should be 'Your age group is "answer".', where answer is based on reference data.\
-The result for the second point should be 'Your NE category is "answer".', where answer is based on reference data. \
-The result for the third point should be 'Your Total CPF Con percentage is "answer".', where answer is based on reference data. \
-The result for the fifth point should be 'Your PW Share CPF Con Percentage is "answer".', where answer is based on reference data. \
-THe result for the fourth point should be 'Your Total CPF Con amount is "answer".', where answer is the computation for total cpf con based on the reference data. \
-The result for the sixth point should be 'Your Platform Worker's share of CPF Con amount is "answer".', where answer is the computation for platform worker's share based on the reference data. \
 The same font and style should be used for all the results displayed. \
 Mathematical computations need to be written in text that is understandable. \
 Details: \
