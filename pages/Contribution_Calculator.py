@@ -52,8 +52,12 @@ reference_df = pd.read_csv(csv_file_path)
 # Define CPF calculation prompt template
 cpf_prompt = ChatPromptTemplate([("human", "You are an assistant to calculate CPF contributions. \
 Use the following details and reference data to compute: \
-- Total CPF contributions \
-- Platform worker's share of contributions \
+- Determine the Age_Group using age \ 
+- Determine the NE category using NE \ 
+- Determine the percentage for Total CPF Con \ 
+- Determine the percentage for PW Share CPF Con \ 
+- Compute total CPF contributions \
+- Compute platform worker's share of contributions \
 If you can't determine contributions, state 'Calculation unavailable'. \
 Details: \
 Net Earnings: {NE} \
