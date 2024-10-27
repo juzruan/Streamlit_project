@@ -58,35 +58,30 @@ Details: \
 Net Earnings: {NE} \
 Age: {Age} \
 Year: {Year} \
-Reference Data: {reference_df}")])
+Reference Data: {reference_data}")])
 
 # Define QA chain for CPF calculation
 cpf_qa_chain = RetrievalQA.from_chain_type(
     ChatOpenAI(model='gpt-4o-mini', temperature=0), 
-    retriever=None, 
-    chain_type_kwargs={"prompt": cpf_prompt}
+    retriever=None,
+    chain_type_kwargs={"prompt": cpf_prompt, "document_variable_name": "reference_data"}
 )
 
 def calculate_cpf_contributions(NE, Age, Year, reference_df):
     # Convert reference df into a suitable format for the prompt
-    reference_df = reference_df.to_dict()  # convert dataframe to dictionary format
+    reference_data = reference_df.to_dict()  # convert dataframe to dictionary format
     
     # Create the question with CPF details and reference data
     question = {
         "NE": NE,
         "Age": Age,
         "Year": Year,
-        "reference_df": reference_df
+        "reference_data": reference_data
     }
     
     # Run the CPF calculation chain
     result = cpf_qa_chain.invoke({"query": question})
     return result["result"]
-
-# Example usage in Streamlit
-net_earnings = 3000  # example value
-age = 30  # example value
-year = 2024  # example value
 
 # Calculate CPF contributions
 cpf_result = calculate_cpf_contributions(NE, Age, Year, reference_df)
