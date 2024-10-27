@@ -63,7 +63,7 @@ Reference Data: {reference_df}")])
 # Define QA chain for CPF calculation
 cpf_qa_chain = RetrievalQA.from_chain_type(
     ChatOpenAI(model='gpt-4o-mini', temperature=0), 
-    retriever=scrap_mom_data().as_retriever(), 
+    retriever=None, 
     chain_type_kwargs={"prompt": cpf_prompt}
 )
 
