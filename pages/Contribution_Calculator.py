@@ -51,29 +51,36 @@ reference_df = pd.read_csv(csv_file_path)
 reference_data_str = reference_df.to_csv(index=False)
 
 # Define the improved prompt with clearer instructions and structured data
-cpf_prompt = ChatPromptTemplate([("human", "You are an assistant to calculate CPF contributions for Platform Workers. \
-Use the provided details and reference data below to compute the following values directly: \
-1. Determine the 'Age_Group' based on 'Age'. \
-2. Determine the 'NE category' based on 'NE' value. \
-3. Use 'Age_Group' and 'NE category' to locate the correct percentages for 'Total CPF Con' and 'PW Share CPF Con' from the reference data table. \
-4. Calculate the total CPF contributions as (NE * Total CPF Con percentage). \
-5. Calculate the platform worker's share as (NE * PW Share CPF Con percentage). \
-Only provide the computed results, with explanations if necessary. \
-If unable to determine contributions, respond with 'Calculation unavailable'. \
-The result for each point should be in a new line. \
-The result for the first point should be 'Your age group is "answer".', where answer is based on reference data.\
-The result for the second point should be 'Your NE category is "answer".', where answer is based on reference data. \
-The result for the third point should be 'Your Total CPF Con percentage is "answer".', where answer is based on reference data. \
-The result for the fifth point should be 'Your PW Share CPF Con Percentage is "answer".', where answer is based on reference data. \
-THe result for the fourth point should be 'Your Total CPF Con amount is "answer".', where answer is the computation for total cpf con based on the reference data. \
-The result for the sixth point should be 'Your Platform Worker's share of CPF Con amount is "answer".', where answer is the computation for platform worker's share based on the reference data. \
-The same font and style should be used for all the results displayed. \
-Mathematical computations need to be written in text that is understandable. \
-Details: \
-- Net Earnings: {NE} \
-- Age: {Age} \
-- Year: {Year} \
-Reference Data: \n{reference_data_str}")])
+cpf_prompt = ChatPromptTemplate.from_messages([
+    ("human", 
+     "You are an assistant to calculate CPF contributions for Platform Workers. "
+     "Use the provided details and reference data below to compute the following values directly: \n"
+     "1. Determine the 'Age_Group' based on 'Age'. \n"
+     "2. Determine the 'NE category' based on 'NE' value. \n"
+     "3. Use 'Age_Group' and 'NE category' to locate the correct percentages for 'Total CPF Con' and 'PW Share CPF Con' from the reference data table. \n"
+     "4. Calculate the total CPF contributions as (NE * Total CPF Con percentage). \n"
+     "5. Calculate the platform worker's share as (NE * PW Share CPF Con percentage). \n"
+     "Only provide the computed results, with explanations if necessary. \n"
+     "If unable to determine contributions, respond with 'Calculation unavailable'. \n\n"
+     "The result for each point should be in a new line. \n\n"
+     
+     "Results format:\n"
+     "- For the first point: 'Your age group is \"answer\".'\n"
+     "- For the second point: 'Your NE category is \"answer\".'\n"
+     "- For the third point: 'Your Total CPF Con percentage is \"answer\".'\n"
+     "- For the fifth point: 'Your PW Share CPF Con Percentage is \"answer\".'\n"
+     "- For the fourth point: 'Your Total CPF Con amount is \"answer\".'\n"
+     "- For the sixth point: 'Your Platform Worker's share of CPF Con amount is \"answer\".'\n\n"
+
+     "Mathematical computations should be written in understandable text. \n\n"
+     "Details: \n"
+     "- Net Earnings: {NE} \n"
+     "- Age: {Age} \n"
+     "- Year: {Year} \n\n"
+     
+     "Reference Data:\n{reference_data_str}"
+    )
+])
 
 # Define the LLM chain with the prompt template
 cpf_chain = LLMChain(
