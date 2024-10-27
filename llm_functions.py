@@ -68,17 +68,32 @@ def count_tokens_from_message(messages):
 
 # This function is for computing the total CPF Contributions and the Platform Worker's share of CPF contributions.
 
-def calculate_with_llm(prompt):
-    # Prepare your prompt with the reference data
-    full_prompt = f"{prompt}\nReference data: {reference_data}"
+def calculate_with_llm(age, NE, year, reference_df):
+    # Convert user inputs to the appropriate data types if needed
+    age = int(age) if age else None
+    NE = int(NE) if NE else None
+    year = int(year) if year else None
     
-    # Send prompt to OpenAI and get the response
-    response = openai.Completion.create(
-        engine="text-davinci-003",  # Choose the engine that fits your needs
-        prompt=full_prompt,
-        max_tokens=100  # Adjust max tokens based on your needs
+    # Convert the DataFrame to a dictionary for reference
+    reference_data = reference_df.to_dict(orient="records")
+    
+    # Create a prompt with user inputs and reference data
+    prompt = (
+        f"Using the following information:\n"
+        f"Age: {age}\n"
+        f"Net Earnings (NE): {NE}\n"
+        f"Year: {year}\n"
+        f"Reference data: {reference_data}\n\n"
+        "Please calculate the amount based on the above information."
     )
     
-    # Extract the response text
+    # Send prompt to OpenAI
+    response = openai.Completion.create(
+        engine="text-davinci-003",
+        prompt=prompt,
+        max_tokens=100  # Adjust tokens based on expected response length
+    )
+    
+    # Extract the answer
     answer = response.choices[0].text.strip()
     return answer
