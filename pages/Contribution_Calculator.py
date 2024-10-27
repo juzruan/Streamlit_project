@@ -60,28 +60,27 @@ Age: {Age} \
 Year: {Year} \
 Reference Data: {reference_data}")])
 
-# Define QA chain for CPF calculation
-cpf_qa_chain = RetrievalQA.from_chain_type(
-    ChatOpenAI(model='gpt-4o-mini', temperature=0), 
-    retriever=None,
-    chain_type_kwargs={"prompt": cpf_prompt, "document_variable_name": "reference_data"}
+# Define the LLM chain with the prompt template
+cpf_chain = LLMChain(
+    llm=ChatOpenAI(model='gpt-4o-mini', temperature=0),
+    prompt=cpf_prompt
 )
 
 def calculate_cpf_contributions(NE, Age, Year, reference_df):
-    # Convert reference df into a suitable format for the prompt
-    reference_data = reference_df.to_dict()  # convert dataframe to dictionary format
+    # Convert reference data to a dictionary format for the prompt
+    reference_data = reference_df.to_dict()
     
-    # Create the question with CPF details and reference data
-    question = {
+    # Prepare the input data for the LLM chain
+    inputs = {
         "NE": NE,
         "Age": Age,
         "Year": Year,
         "reference_data": reference_data
     }
     
-    # Run the CPF calculation chain
-    result = cpf_qa_chain.invoke({"query": question})
-    return result["result"]
+    # Run the chain to get the result
+    result = cpf_chain.run(inputs)
+    return result
 
 # Calculate CPF contributions
 cpf_result = calculate_cpf_contributions(NE, Age, Year, reference_df)
