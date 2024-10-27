@@ -60,6 +60,8 @@ Use the provided details and reference data below to compute the following value
 5. Calculate the platform worker's share as (NE * PW Share CPF Con percentage). \
 Only provide the computed results, with explanations if necessary. \
 If unable to determine contributions, respond with 'Calculation unavailable'. \
+The result for each point should be in a new line. \
+Mathematical computations need to be written in text that is understandable. \
 Details: \
 - Net Earnings: {NE} \
 - Age: {Age} \
