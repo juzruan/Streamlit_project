@@ -48,22 +48,22 @@ st.write(f"Your Net Earnings is ${NE:.2f}.")
 # Load the reference data CSV
 csv_file_path = "https://raw.githubusercontent.com/juzruan/Streamlit_project/refs/heads/main/ConRate.csv"  # update this path
 reference_df = pd.read_csv(csv_file_path)
+reference_data_str = reference_df.to_csv(index=False)
 
 # Define the prompt
 cpf_prompt = ChatPromptTemplate([("human", "You are an assistant to calculate CPF contributions. \
 Use the following details and reference data to compute: \
-- Determine the Age_Group using age \
-- Determine the NE category using NE \
-- Determine the percentage for Total CPF Con \
-- Determine the percentage for PW Share CPF Con \
-- Compute total CPF contributions \
-- Compute platform worker's share of contributions \
+1. Determine the 'Age_Group' from 'Age' \
+2. Determine the 'NE' from 'NE' \
+3. Use the `Age_Group` and `NE` to find the correct percentages for `Total CPF Con` and `PW Share CPF Con` from the reference data. \
+4. Compute the total CPF contributions as (NE * Total CPF Con percentage). \
+5. Compute the platform worker's share as (NE * PW Share CPF Con percentage). \
 If you can't determine contributions, state 'Calculation unavailable'. \
 Details: \
 Net Earnings: {NE} \
 Age: {Age} \
 Year: {Year} \
-Reference Data: {reference_data}")])
+Reference Data Table: \n{reference_data_str}")])
 
 # Define the LLM chain with the prompt template
 cpf_chain = LLMChain(
