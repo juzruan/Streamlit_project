@@ -1,5 +1,8 @@
 # Set up and run this Streamlit App
 import streamlit as st
+import llm_functions
+import openai
+import pandas as pd
 
 st.set_page_config(
     layout="centered",
@@ -37,3 +40,9 @@ else:
 
 NE = (1-FEDAr)*GE
 st.write(f"Your Net Earnings is ${NE:.2f}.")
+
+# Load the reference data CSV
+csv_file_path = "Streamlit_project/ConRate.csv"  # update this path
+reference_df = pd.read_csv(csv_file_path)
+
+
