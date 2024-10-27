@@ -52,6 +52,32 @@ reference_df = pd.read_csv(csv_file_path)
    # st.error("Required fields not found in reference data.")
    # st.stop()
 
+def calculate_with_llm(Age, NE, Year, Total_CPF_Con, PW_Share_CPF_Con):
+    Age = int(Age) if Age else None
+    NE = float(NE) if NE else None
+    Year = int(Year) if Year else None
+    
+    prompt = (
+        f"Using the following data:\n"
+        f"Age: {age}\n"
+        f"Net Earnings (NE): {NE}\n"
+        f"Year: {year}\n"
+        f"Total CPF Contribution: {total_cpf_con}\n"
+        f"Platform Worker's Share of CPF Contribution: {platform_worker_share}\n\n"
+        "Please calculate the following:\n"
+        "1. Total CPF Contribution.\n"
+        "2. Platform Worker's Share of CPF Contribution based on the above information."
+    )
+    
+    response = openai.Completion.create(
+        engine="text-davinci-003",
+        prompt=prompt,
+        max_tokens=150
+    )
+    
+    answer = response.choices[0].text.strip()
+    return answer
+
 # Display result if inputs are filled
 if Age and NE and Year:
     result = calculate_with_llm(Age, NE, Year, Total_CPF_Con, PW_Share_CPF_Con)
