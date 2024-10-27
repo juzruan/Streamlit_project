@@ -51,7 +51,7 @@ reference_df = pd.read_csv(csv_file_path)
 reference_data_str = reference_df.to_csv(index=False)
 
 # Define the prompt
-cpf_prompt = ChatPromptTemplate([("human", "You are an assistant to calculate CPF contributions. \
+cpf_prompt = ChatPromptTemplate([("human", "You are an assistant to calculate CPF contributions for Platform Workers. \
 Use the following details and reference data to compute: \
 1. Determine the 'Age_Group' from 'Age' \
 2. Determine the 'NE' from 'NE' \
@@ -60,10 +60,10 @@ Use the following details and reference data to compute: \
 5. Compute the platform worker's share as (NE * PW Share CPF Con percentage). \
 If you can't determine contributions, state 'Calculation unavailable'. \
 Details: \
-Net Earnings: {NE} \
-Age: {Age} \
-Year: {Year} \
-Reference Data Table: \n{reference_data_str}")])
+Net Earnings: {{NE}} \
+Age: {{Age}} \
+Year: {{Year}} \
+Reference Data: \n{reference_data_str}")])
 
 # Define the LLM chain with the prompt template
 cpf_chain = LLMChain(
