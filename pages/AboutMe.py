@@ -11,6 +11,8 @@ st.sidebar.write("All the info you need about platform work")
 # Add some content to the main app
 st.title("Platform Work Chatbot 💰🤖")
 
+st.image("pages/grab.png", caption="Platform Worker", use_column_width=True)
+
 st.write("""
 
 Project Scope: To develop a chatbot that will use the latest published info on Platform Workers Act to draft responses to enquiries
