@@ -14,6 +14,8 @@ import scrape3
 # Add some content to the main app
 st.title("Platform Work Chatbot 💰🤖")
 
+st.image("pages/grab.png", caption="Platform Worker", use_column_width=True)
+
 form = st.form(key="form")
 
 user_prompt = form.text_area("Enter your query regarding platform work here:", height=200)
