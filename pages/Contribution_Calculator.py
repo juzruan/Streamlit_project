@@ -50,19 +50,20 @@ csv_file_path = "https://raw.githubusercontent.com/juzruan/Streamlit_project/ref
 reference_df = pd.read_csv(csv_file_path)
 reference_data_str = reference_df.to_csv(index=False)
 
-# Define the prompt
+# Define the improved prompt with clearer instructions and structured data
 cpf_prompt = ChatPromptTemplate([("human", "You are an assistant to calculate CPF contributions for Platform Workers. \
-Use the following details and reference data to compute: \
-1. Determine the 'Age_Group' from 'Age' \
-2. Determine the 'NE' from 'NE' \
-3. Use the `Age_Group` and `NE` to find the correct percentages for `Total CPF Con` and `PW Share CPF Con` from the reference data. \
-4. Compute the total CPF contributions as (NE * Total CPF Con percentage). \
-5. Compute the platform worker's share as (NE * PW Share CPF Con percentage). \
-If you can't determine contributions, state 'Calculation unavailable'. \
+Use the provided details and reference data below to compute the following values directly: \
+1. Determine the 'Age_Group' based on 'Age'. \
+2. Determine the 'NE category' based on 'NE' value. \
+3. Use 'Age_Group' and 'NE category' to locate the correct percentages for 'Total CPF Con' and 'PW Share CPF Con' from the reference data table. \
+4. Calculate the total CPF contributions as (NE * Total CPF Con percentage). \
+5. Calculate the platform worker's share as (NE * PW Share CPF Con percentage). \
+Only provide the computed results, with explanations if necessary. \
+If unable to determine contributions, respond with 'Calculation unavailable'. \
 Details: \
-Net Earnings: {{NE}} \
-Age: {{Age}} \
-Year: {{Year}} \
+- Net Earnings: {NE} \
+- Age: {Age} \
+- Year: {Year} \
 Reference Data: \n{reference_data_str}")])
 
 # Define the LLM chain with the prompt template
@@ -71,8 +72,8 @@ cpf_chain = LLMChain(
     prompt=cpf_prompt
 )
 
+# Function to calculate CPF contributions
 def calculate_cpf_contributions(NE, Age, Year, reference_data_str):
-    
     # Prepare the input data for the LLM chain
     inputs = {
         "NE": NE,
