@@ -3,9 +3,10 @@ import streamlit as st
 import llm_functions
 import openai
 import pandas as pd
-from langchain.chains import RetrievalQA
 from langchain.prompts import ChatPromptTemplate
 from langchain.chat_models import ChatOpenAI
+from langchain.chains import LLMChain
+
 
 st.set_page_config(
     layout="centered",
