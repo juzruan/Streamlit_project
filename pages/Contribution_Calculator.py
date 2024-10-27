@@ -42,7 +42,19 @@ NE = (1-FEDAr)*GE
 st.write(f"Your Net Earnings is ${NE:.2f}.")
 
 # Load the reference data CSV
-csv_file_path = "Streamlit_project/ConRate.csv"  # update this path
+csv_file_path = "https://raw.githubusercontent.com/juzruan/Streamlit_project/refs/heads/main/ConRate.csv"  # update this path
 reference_df = pd.read_csv(csv_file_path)
 
+try:
+    total_cpf_con = reference_df.loc[reference_df['Total_CPF_Con'] == 'Total CPF Contribution', 'Value'].values[0]
+    platform_worker_share = reference_df.loc[reference_df['PW_Share_CPF_Con'] == 'Platform Worker Share of CPF Contribution', 'Value'].values[0]
+except IndexError:
+    st.error("Required fields not found in reference data.")
+    st.stop()
 
+# Display result if inputs are filled
+if Age and NE and Year:
+    result = calculate_with_llm(Age, NE, Year, Total_CPF_Con, PW_Share_CPF_Con)
+    st.write("Calculation Results:", result)
+else:
+    st.write("Please enter all required fields.")
